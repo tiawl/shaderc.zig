@@ -31,9 +31,33 @@ fn update (builder: *std.Build, include_path: [] const u8) !void
 
   while (try walker.next ()) |entry|
   {
-    if (entry.kind == .file and toolbox.is_source_file (entry.basename) and
-      std.mem.indexOf (u8, entry.basename, "test") != null)
-        try std.fs.deleteFileAbsolute (try std.fs.path.join (builder.allocator, &.{ include_path, entry.path, }));
+    if (entry.kind == .file and ((toolbox.is_source_file (entry.basename) and
+      std.mem.indexOf (u8, entry.basename, "test") != null) or
+      (!toolbox.is_source_file (entry.basename) and !toolbox.is_header_file (entry.basename)
+        and !std.mem.endsWith (u8, entry.basename, ".inc"))))
+          try std.fs.deleteFileAbsolute (try std.fs.path.join (builder.allocator, &.{ include_path, entry.path, }));
+  }
+
+  var flag = true;
+
+  while (flag)
+  {
+    flag = false;
+
+    walker = try include_dir.walk (builder.allocator);
+    defer walker.deinit ();
+
+    while (try walker.next ()) |entry|
+    {
+      if (entry.kind == .directory)
+      {
+        std.fs.deleteDirAbsolute (try std.fs.path.join (builder.allocator, &.{ include_path, entry.path, })) catch |err|
+        {
+          if (err == error.DirNotEmpty) continue else return err;
+        };
+        flag = true;
+      }
+    }
   }
 }
 
