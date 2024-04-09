@@ -1,0 +1,24 @@
+.{
+  .name = "shaderc.zig",
+  .version = "2024.0.0",
+  .minimum_zig_version = "0.12.0",
+  .paths = .{
+    "build.zig",
+    "build.zig.zon",
+    "include",
+  },
+  .dependencies = .{
+    .toolbox = .{
+      .url = "https://github.com/tiawl/toolbox/archive/refs/tags/1.2.1.tar.gz",
+      .hash = "1220569ff8c75a3a9f449bef1bb78291769b908e2c0a0041fafddfc4fed5685d28ee",
+    },
+    .glslang = .{
+      .url = "git+https://github.com/tiawl/glslang.zig#13bf7152405f4cf5f1e9a29f2404268127a27b6d",
+      .hash = "1220d884f90a5f1476bfe92e3ec709ae49333065f85001f1d454f7c350ed80303d7a",
+    },
+    .spirv = .{
+      .url = "git+https://github.com/tiawl/spirv.zig#e867cfe245c8d46a7266001b5fc5446f723613c4",
+      .hash = "12201a21c36c264c4cc656e076468e7f08a0b8ca81065a36ebe9d405537bcaf9642a",
+    },
+  },
+}
