@@ -33,7 +33,7 @@ fn update (builder: *std.Build, include_path: [] const u8) !void
   {
     if (entry.kind == .file and ((toolbox.is_source_file (entry.basename) and
       std.mem.indexOf (u8, entry.basename, "test") != null) or
-      (!toolbox.is_source_file (entry.basename) and !toolbox.is_header_file (entry.basename)
+      (!toolbox.is_source_file (entry.basename) and !toolbox.is_c_header_file (entry.basename)
         and !std.mem.endsWith (u8, entry.basename, ".inc"))))
           try std.fs.deleteFileAbsolute (try std.fs.path.join (builder.allocator, &.{ include_path, entry.path, }));
   }
@@ -113,7 +113,7 @@ pub fn build (builder: *std.Build) !void
   lib.installHeadersDirectory (shaderc_util_include_path, "libshaderc_util");
   std.debug.print ("[shaderc headers dir] {s}\n", .{ shaderc_util_include_path, });
 
-  lib.linkLibCpp ();
+  //lib.linkLibC ();
 
   var dir: std.fs.Dir = undefined;
   var walker: std.fs.Dir.Walker = undefined;
