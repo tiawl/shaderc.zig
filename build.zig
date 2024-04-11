@@ -31,9 +31,9 @@ fn update (builder: *std.Build, include_path: [] const u8) !void
 
   while (try walker.next ()) |entry|
   {
-    if (entry.kind == .file and ((toolbox.is_source_file (entry.basename) and
+    if (entry.kind == .file and ((toolbox.is_cpp_source_file (entry.basename) and
       std.mem.indexOf (u8, entry.basename, "test") != null) or
-      (!toolbox.is_source_file (entry.basename) and !toolbox.is_c_header_file (entry.basename)
+      (!toolbox.is_cpp_source_file (entry.basename) and !toolbox.is_c_header_file (entry.basename)
         and !std.mem.endsWith (u8, entry.basename, ".inc"))))
           try std.fs.deleteFileAbsolute (try std.fs.path.join (builder.allocator, &.{ include_path, entry.path, }));
   }
@@ -89,10 +89,12 @@ pub fn build (builder: *std.Build) !void
     .optimize = optimize,
   });
 
-  lib.linkLibrary (glslang_dep.artifact ("glslang"));
-  lib.installLibraryHeaders (glslang_dep.artifact ("glslang"));
-  lib.linkLibrary (spirv_dep.artifact ("spirv"));
-  lib.installLibraryHeaders (spirv_dep.artifact ("spirv"));
+  const glslang_compile_step = glslang_dep.artifact ("glslang");
+  const spirv_compile_step = spirv_dep.artifact ("spirv");
+  lib.linkLibrary (glslang_compile_step);
+  lib.installLibraryHeaders (glslang_compile_step);
+  lib.linkLibrary (spirv_compile_step);
+  lib.installLibraryHeaders (spirv_compile_step);
 
   for ([_] std.Build.LazyPath {
     .{ .path = try std.fs.path.join (builder.allocator, &.{ "include", "libshaderc", "include", }), },
@@ -105,22 +107,23 @@ pub fn build (builder: *std.Build) !void
 
   const shaderc_path = try std.fs.path.join (builder.allocator, &.{ include_path, "libshaderc", });
   const shaderc_include_path = try std.fs.path.join (builder.allocator, &.{ shaderc_path, "include", "shaderc", });
-  lib.installHeadersDirectory (shaderc_include_path, "shaderc");
+  lib.installHeadersDirectory (.{ .path = shaderc_include_path, }, "shaderc", .{ .include_extensions = &.{ "-h", }, });
   std.debug.print ("[shaderc headers dir] {s}\n", .{ shaderc_include_path, });
 
   const shaderc_util_path = try std.fs.path.join (builder.allocator, &.{ include_path, "libshaderc_util", });
   const shaderc_util_include_path = try std.fs.path.join (builder.allocator, &.{ shaderc_util_path, "include", "libshaderc_util", });
-  lib.installHeadersDirectory (shaderc_util_include_path, "libshaderc_util");
+  lib.installHeadersDirectory (.{ .path = shaderc_util_include_path, }, "libshaderc_util", .{ .include_extensions = &.{ "-h", }, });
   std.debug.print ("[shaderc headers dir] {s}\n", .{ shaderc_util_include_path, });
-
-  //lib.linkLibC ();
 
   var dir: std.fs.Dir = undefined;
   var walker: std.fs.Dir.Walker = undefined;
 
-  for ([_][] const u8 { shaderc_path, shaderc_util_path, }) |path|
+  for ([_] struct { abs: [] const u8, rel: [] const u8, } {
+    .{ .abs = shaderc_path, .rel = try std.fs.path.join (builder.allocator, &.{ "include", "libshaderc", }), },
+    .{ .abs = shaderc_util_path, .rel = try std.fs.path.join (builder.allocator, &.{ "include", "libshaderc_util", }), },
+  }) |paths|
   {
-    dir = try std.fs.openDirAbsolute (path, .{ .iterate = true, });
+    dir = try std.fs.openDirAbsolute (paths.abs, .{ .iterate = true, });
     defer dir.close ();
 
     walker = try dir.walk (builder.allocator);
@@ -130,13 +133,10 @@ pub fn build (builder: *std.Build) !void
     {
       switch (entry.kind)
       {
-        .file => {
-                   if (toolbox.is_source_file (entry.basename))
-                   {
-                     const source = try std.fs.path.join (builder.allocator, &.{ path, entry.path, });
-                     try sources.append (source);
-                     std.debug.print ("[shaderc source] {s}\n", .{ source, });
-                   }
+        .file => if (toolbox.is_cpp_source_file (entry.basename))
+                 {
+                   try sources.append (try std.fs.path.join (builder.allocator, &.{ paths.rel, builder.dupe (entry.path), }));
+                   std.debug.print ("[shaderc source] {s}\n", .{ try std.fs.path.join (builder.allocator, &.{ paths.abs, entry.path, }), });
                  },
         else => {},
       }
@@ -145,7 +145,7 @@ pub fn build (builder: *std.Build) !void
 
   lib.addCSourceFiles (.{
     .files = sources.slice (),
-    .flags = &.{ "-DENABLE_HLSL", },
+    .flags = &.{ "-DENABLE_HLSL=OFF", },
   });
 
   builder.installArtifact (lib);
