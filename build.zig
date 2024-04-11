@@ -107,12 +107,12 @@ pub fn build (builder: *std.Build) !void
 
   const shaderc_path = try std.fs.path.join (builder.allocator, &.{ include_path, "libshaderc", });
   const shaderc_include_path = try std.fs.path.join (builder.allocator, &.{ shaderc_path, "include", "shaderc", });
-  lib.installHeadersDirectory (.{ .path = shaderc_include_path, }, "shaderc", .{ .include_extensions = &.{ "-h", }, });
+  lib.installHeadersDirectory (.{ .path = shaderc_include_path, }, "shaderc", .{ .include_extensions = &.{ ".h", }, });
   std.debug.print ("[shaderc headers dir] {s}\n", .{ shaderc_include_path, });
 
   const shaderc_util_path = try std.fs.path.join (builder.allocator, &.{ include_path, "libshaderc_util", });
   const shaderc_util_include_path = try std.fs.path.join (builder.allocator, &.{ shaderc_util_path, "include", "libshaderc_util", });
-  lib.installHeadersDirectory (.{ .path = shaderc_util_include_path, }, "libshaderc_util", .{ .include_extensions = &.{ "-h", }, });
+  lib.installHeadersDirectory (.{ .path = shaderc_util_include_path, }, "libshaderc_util", .{ .include_extensions = &.{ ".h", }, });
   std.debug.print ("[shaderc headers dir] {s}\n", .{ shaderc_util_include_path, });
 
   var dir: std.fs.Dir = undefined;
