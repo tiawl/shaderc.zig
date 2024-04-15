@@ -133,11 +133,13 @@ pub fn build (builder: *std.Build) !void
     {
       switch (entry.kind)
       {
-        .file => if (toolbox.is_cpp_source_file (entry.basename))
-                 {
-                   try sources.append (try std.fs.path.join (builder.allocator, &.{ paths.rel, builder.dupe (entry.path), }));
-                   std.debug.print ("[shaderc source] {s}\n", .{ try std.fs.path.join (builder.allocator, &.{ paths.abs, entry.path, }), });
-                 },
+        .file => {
+          if (toolbox.is_cpp_source_file (entry.basename))
+          {
+            try sources.append (try std.fs.path.join (builder.allocator, &.{ paths.rel, builder.dupe (entry.path), }));
+            std.debug.print ("[shaderc source] {s}\n", .{ try std.fs.path.join (builder.allocator, &.{ paths.abs, entry.path, }), });
+          }
+        },
         else => {},
       }
     }
