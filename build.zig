@@ -21,7 +21,7 @@ fn update (builder: *std.Build, shaderc_path: [] const u8) !void
   defer shaderc_dir.close ();
 
   var it = shaderc_dir.iterate ();
-  while (try it.next ()) |entry|
+  while (try it.next ()) |*entry|
   {
     if (!std.mem.startsWith (u8, entry.name, "libshaderc"))
       try std.fs.deleteTreeAbsolute (try std.fs.path.join (builder.allocator,
@@ -31,7 +31,7 @@ fn update (builder: *std.Build, shaderc_path: [] const u8) !void
   var walker = try shaderc_dir.walk (builder.allocator);
   defer walker.deinit ();
 
-  while (try walker.next ()) |entry|
+  while (try walker.next ()) |*entry|
   {
     if (entry.kind == .file and ((toolbox.isCppSource (
       entry.basename) and
@@ -52,7 +52,7 @@ fn update (builder: *std.Build, shaderc_path: [] const u8) !void
     walker = try shaderc_dir.walk (builder.allocator);
     defer walker.deinit ();
 
-    while (try walker.next ()) |entry|
+    while (try walker.next ()) |*entry|
     {
       if (entry.kind == .directory)
       {
@@ -133,7 +133,7 @@ pub fn build (builder: *std.Build) !void
     walker = try dir.walk (builder.allocator);
     defer walker.deinit ();
 
-    while (try walker.next ()) |entry|
+    while (try walker.next ()) |*entry|
     {
       switch (entry.kind)
       {
