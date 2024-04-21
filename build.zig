@@ -1,8 +1,8 @@
 const std = @import ("std");
 const toolbox = @import ("toolbox");
-const pkg = .{ .name = "shaderc.zig", .version = "2024.0.0", };
 
-fn update (builder: *std.Build, shaderc_path: [] const u8) !void
+fn update (builder: *std.Build, shaderc_path: [] const u8,
+  dependencies: *const toolbox.Dependencies) !void
 {
   std.fs.deleteTreeAbsolute (shaderc_path) catch |err|
   {
@@ -13,8 +13,7 @@ fn update (builder: *std.Build, shaderc_path: [] const u8) !void
     }
   };
 
-  try toolbox.clone (builder, "https://github.com/google/shaderc.git",
-    "v" ++ pkg.version [0 .. pkg.version.len - 2], shaderc_path);
+  try dependencies.clone (builder, "shaderc", shaderc_path);
 
   var shaderc_dir =
     try std.fs.openDirAbsolute (shaderc_path, .{ .iterate = true, });
@@ -33,38 +32,14 @@ fn update (builder: *std.Build, shaderc_path: [] const u8) !void
 
   while (try walker.next ()) |*entry|
   {
-    if (entry.kind == .file and ((toolbox.isCppSource (
-      entry.basename) and
+    if ((entry.kind == .file) and ((
       std.mem.indexOf (u8, entry.basename, "test") != null) or
-      (!toolbox.isCppSource (entry.basename) and
-      !toolbox.isCHeader (entry.basename) and
-      !std.mem.endsWith (u8, entry.basename, ".inc"))))
+      toolbox.isCppHeader (entry.basename)))
         try std.fs.deleteFileAbsolute (try std.fs.path.join (
           builder.allocator, &.{ shaderc_path, entry.path, }));
   }
 
-  var flag = true;
-
-  while (flag)
-  {
-    flag = false;
-
-    walker = try shaderc_dir.walk (builder.allocator);
-    defer walker.deinit ();
-
-    while (try walker.next ()) |*entry|
-    {
-      if (entry.kind == .directory)
-      {
-        std.fs.deleteDirAbsolute (try std.fs.path.join (builder.allocator,
-          &.{ shaderc_path, entry.path, })) catch |err|
-        {
-          if (err == error.DirNotEmpty) continue else return err;
-        };
-        flag = true;
-      }
-    }
-  }
+  try toolbox.clean (builder, &.{ "shaderc", }, &.{ ".inc", });
 }
 
 pub fn build (builder: *std.Build) !void
@@ -75,8 +50,34 @@ pub fn build (builder: *std.Build) !void
   const shaderc_path =
     try builder.build_root.join (builder.allocator, &.{ "shaderc", });
 
+  const fetch_option = builder.option (bool, "fetch",
+    "Update .versions folder and build.zig.zon then stop execution")
+      orelse false;
+
+  var dependencies = try toolbox.Dependencies.init (builder,
+  .{
+     .toolbox = .{
+       .name = "tiawl/toolbox",
+       .api = toolbox.Repository.API.github,
+     },
+     .glslang = .{
+       .name = "tiawl/glslang.zig",
+       .api = toolbox.Repository.API.github,
+     },
+     .spirv = .{
+       .name = "tiawl/spirv.zig",
+       .api = toolbox.Repository.API.github,
+     },
+   }, .{
+     .shaderc = .{
+       .name = "google/shaderc",
+       .api = toolbox.Repository.API.github,
+     },
+   });
+
+  if (fetch_option) try dependencies.fetch (builder, "shaderc.zig");
   if (builder.option (bool, "update", "Update binding") orelse false)
-    try update (builder, shaderc_path);
+    try update (builder, shaderc_path, &dependencies);
 
   const lib = builder.addStaticLibrary (.{
     .name = "shaderc",
