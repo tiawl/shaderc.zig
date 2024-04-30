@@ -13,8 +13,8 @@
             .hash = "1220fee4bf023b99bf773d4682549b2d6436262dd84378737ed64e5e084b8d698d7f",
         },
         .glslang = .{
-            .url = "https://github.com/tiawl/glslang.zig/archive/refs/tags/vulkan-sdk-1.3.280.0.tar.gz",
-            .hash = "1220923984daaf3f7577f440ed24af45baf789cf1d45799dd51a5eb6d2f6abcf1ac0",
+            .url = "https://github.com/tiawl/glslang.zig/archive/refs/tags/14.1.0.tar.gz",
+            .hash = "1220ba6f231dd6070059605fd46dc9b2ba4e0c72d6a4f451db355d6553806342ad48",
         },
         .spirv = .{
             .url = "https://github.com/tiawl/spirv.zig/archive/refs/tags/v2024.2.rc1.tar.gz",
