@@ -3,9 +3,11 @@
     .version = "1.0.0",
     .minimum_zig_version = "0.12.0",
     .paths = .{
+        "README.md",
         "build.zig.zon",
         "shaderc",
         "build.zig",
+        "LICENSE.md",
     },
     .dependencies = .{
         .toolbox = .{
