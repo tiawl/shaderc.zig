@@ -51,6 +51,7 @@ pub fn build (builder: *std.Build) !void
     try builder.build_root.join (builder.allocator, &.{ "shaderc", });
 
   const dependencies = try toolbox.Dependencies.init (builder, "shaderc.zig",
+  &.{ "shaderc", },
   .{
      .toolbox = .{
        .name = "tiawl/toolbox",
