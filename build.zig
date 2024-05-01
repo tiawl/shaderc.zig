@@ -54,20 +54,20 @@ pub fn build (builder: *std.Build) !void
   .{
      .toolbox = .{
        .name = "tiawl/toolbox",
-       .api = toolbox.Repository.API.github,
+       .host = toolbox.Repository.Host.github,
      },
      .glslang = .{
        .name = "tiawl/glslang.zig",
-       .api = toolbox.Repository.API.github,
+       .host = toolbox.Repository.Host.github,
      },
      .spirv = .{
        .name = "tiawl/spirv.zig",
-       .api = toolbox.Repository.API.github,
+       .host = toolbox.Repository.Host.github,
      },
    }, .{
      .shaderc = .{
        .name = "google/shaderc",
-       .api = toolbox.Repository.API.github,
+       .host = toolbox.Repository.Host.github,
      },
    });
 
