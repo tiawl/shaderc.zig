@@ -9,6 +9,16 @@ The intention under this fork is to package [google/shaderc][1] for [Zig][2]. So
 * The build system has been replaced with `build.zig`,
 * A cron runs every day to check [google/shaderc][1]. Then it updates this repository if a new release is available.
 
+## How to use it
+
+The goal of this repository is not to provide a [Zig][2] binding for [google/shaderc][1]. There are at least as many legit ways as possible to make a binding as there are active accounts on Github. So you are not going to find an answer for this question here. The point of this repository is to abstract the [google/shaderc][1] compilation process with [Zig][2] (which is not new comers friendly and not easy to maintain) to let you focus on your application. So you can use **shaderc.zig**:
+- as raw (no available example, open an issue if you are interested in, we will be happy to help you),
+- as a daily updated interface for your [Zig][2] binding of [google/shaderc][1] (see [here][11] for a private usage).
+
+## Dependencies
+
+The [Zig][2] part of this package is relying on the latest [Zig][2] release (0.12.0) and will only be updated for the next one (so for the 0.13.0).
+
 Here the repositories' version used by this fork:
 * [google/shaderc](https://github.com/tiawl/shaderc.zig/blob/trunk/.versions/shaderc)
 
@@ -49,3 +59,4 @@ The unprotected parts of this repository are under MIT License. For everything e
 [8]:https://github.com/tiawl/spaceporn-action-ci
 [9]:https://github.com/tiawl/spaceporn-action-cd-ping
 [10]:https://github.com/tiawl/spaceporn-action-cd-pong
+[11]:https://github.com/tiawl/spaceporn/blob/trunk/src/compiler/bindings/shaderc/shaderc.zig
