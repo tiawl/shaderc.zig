@@ -17,8 +17,8 @@
             .hash = "122051aea57247695ed09465425c4998b6f2a8e51ec3de18d1f76ab8965b0c51c061",
         },
         .spirv = .{
-            .url = "https://github.com/tiawl/spirv.zig/archive/f89a60e79eedcf1ba530eced2ad05dc19e7e02e6.tar.gz",
-            .hash = "1220ce0027bcd7f99cba211eb5705871902504373dec4064d72bc913a0e0a091687b",
+            .url = "https://github.com/tiawl/spirv.zig/archive/refs/tags/v2024.2.rc1.tar.gz",
+            .hash = "12202b9ae5d59674efe1100d10b655816e593e8a7709545b62c51f00a0104ac27411",
         },
     },
 }
