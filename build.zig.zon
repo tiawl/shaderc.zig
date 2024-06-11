@@ -9,16 +9,16 @@
     },
     .dependencies = .{
         .toolbox = .{
-            .url = "https://github.com/tiawl/toolbox/archive/refs/tags/1.11.0.tar.gz",
-            .hash = "1220db2c8874f7ebe7d0dc159c0b67b2d00081f012dc77dbf240d1d7a38ea450fb55",
+            .url = "https://github.com/tiawl/toolbox/archive/9a6089a26ec7470ea89f2a553296f29d2945610a.tar.gz",
+            .hash = "1220d4c81fd95d8839c981bb9f3c26859c106cdfac6bc7f7446a72f55b3d976318d6",
         },
         .glslang = .{
-            .url = "https://github.com/tiawl/glslang.zig/archive/a2605505d9e455afd3140c78018c866492a727a4.tar.gz",
-            .hash = "1220aafc3725efcc7c39369006e2e0b800c7dc0465a65c8032fa0ba357d4f9e9a19e",
+            .url = "https://github.com/tiawl/glslang.zig/archive/f0ae219e2db3f7b70b0359d56e1444b10572fcbd.tar.gz",
+            .hash = "122026b08e234673424d7c82f9f15e89f8513cf2b9a1f5fb455b667ea6ca9e24c73b",
         },
         .spirv = .{
-            .url = "https://github.com/tiawl/spirv.zig/archive/5a3a823a6f79e26cca994a32d5bdf25d0c00ebcd.tar.gz",
-            .hash = "122034f8e432f0fe4fb6443899ded13582bb678063106775c49c5339e762aa2e4fc7",
+            .url = "https://github.com/tiawl/spirv.zig/archive/bd592a4aea8efa79c3784c8669dc47711a00f435.tar.gz",
+            .hash = "12200ba1854f7697b639208716f0937c8947743effeba12e44d97dde0f4e9c4c5c02",
         },
     },
 }
