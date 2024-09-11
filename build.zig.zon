@@ -14,11 +14,11 @@
         },
         .glslang = .{
             .url = "https://github.com/tiawl/glslang.zig/archive/refs/tags/14.3.0.tar.gz",
-            .hash = "1220022a177834e079920fbdc062e13f42bc259d03879f3408e034295bd2b6bb993a",
+            .hash = "1220e399d02460db32f338db4ed1226e6d4a838c4665271b07e6f9e5d2398e989e9c",
         },
         .spirv = .{
             .url = "https://github.com/tiawl/spirv.zig/archive/refs/tags/v2024.3.tar.gz",
-            .hash = "1220dfa043a3ece38efab36fd7360432f755bbed77da9ac239d6033c9a3e1936c9c4",
+            .hash = "12206e1247945ecc0bd98262d23fa28f972fc7644d5b7c391643ef178f3b949cea48",
         },
     },
 }
