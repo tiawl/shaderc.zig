@@ -61,7 +61,7 @@ pub fn build (builder: *std.Build) !void
      .glslang = .{
        .name = "tiawl/glslang.zig",
        .host = toolbox.Repository.Host.github,
-       .ref = toolbox.Repository.Reference.tag,
+       .ref = toolbox.Repository.Reference.commit,
      },
      .spirv = .{
        .name = "tiawl/spirv.zig",
