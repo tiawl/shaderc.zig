@@ -13,7 +13,7 @@
             .hash = "122037046680450473adc3670f08c8695638d05f07c00be18e94ff3f7e21edf9ed9e",
         },
         .glslang = .{
-            .url = "https://github.com/tiawl/glslang.zig/archive/refs/tags/15.1.0.tar.gz",
+            .url = "https://github.com/tiawl/glslang.zig/archive/ab2c41ec333d661e33b4ce349fbc114b6e9d0d0b.tar.gz",
             .hash = "1220b465992309a60d4dd36a3eaabd1f14fa8d69663835621abb6e071bbf166f331f",
         },
         .spirv = .{
