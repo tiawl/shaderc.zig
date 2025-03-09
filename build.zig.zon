@@ -1,7 +1,7 @@
 .{
-    .name = "shaderc.zig",
+    .name = .shaderc_zig,
     .version = "1.0.0",
-    .minimum_zig_version = "0.13.0",
+    .minimum_zig_version = "0.14.0",
     .paths = .{
         "build.zig",
         "build.zig.zon",
@@ -9,16 +9,17 @@
     },
     .dependencies = .{
         .toolbox = .{
-            .url = "https://github.com/tiawl/toolbox/archive/refs/tags/1.11.2.tar.gz",
-            .hash = "122037046680450473adc3670f08c8695638d05f07c00be18e94ff3f7e21edf9ed9e",
+            .url = "https://github.com/tiawl/toolbox/archive/2ae25fc6c2d328f015e3fe54e9b3d93fda3bb1b9.tar.gz",
+            .hash = "toolbox-1.11.2-AAAAAJlKAABQa5LndMD-wEstzxaaUiua615kyH8x8lpp",
         },
         .glslang = .{
-            .url = "https://github.com/tiawl/glslang.zig/archive/refs/tags/15.1.0.tar.gz",
-            .hash = "1220b465992309a60d4dd36a3eaabd1f14fa8d69663835621abb6e071bbf166f331f",
+            .url = "https://github.com/tiawl/glslang.zig/archive/10b43d77eca7e30b53a613f55f221f0b44fd3713.tar.gz",
+            .hash = "glslang_zig-1.0.0-QiUC6ugvWAA5rMQtb5GNYNoBe74--GihmSjLNXKl7pQe",
         },
         .spirv = .{
-            .url = "https://github.com/tiawl/spirv.zig/archive/refs/tags/v2025.1.rc1.tar.gz",
-            .hash = "12205e5284af8215845c87332c84939ac369721c3a74252a7369d35e1d59934b4eb2",
+            .url = "https://github.com/tiawl/spirv.zig/archive/47a068aca57c779fd23a98dfc812f1fd24825756.tar.gz",
+            .hash = "spirv_zig-1.0.0-u_xqh0yDZQAM6wpuBQHHwvP4tD5R1mSwOWtNg-N7mI4j",
         },
     },
+    .fingerprint = 0x3dd9ee4ee37ce998,
 }
