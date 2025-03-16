@@ -63,12 +63,12 @@ pub fn build(builder: *std.Build) !void {
             .host = toolbox.Repository.Host.github,
             .ref = toolbox.Repository.Reference.commit,
         },
-        .glslang = .{
+        .glslang_zig = .{
             .name = "tiawl/glslang.zig",
             .host = toolbox.Repository.Host.github,
             .ref = toolbox.Repository.Reference.commit,
         },
-        .spirv = .{
+        .spirv_zig = .{
             .name = "tiawl/spirv.zig",
             .host = toolbox.Repository.Host.github,
             .ref = toolbox.Repository.Reference.commit,
@@ -96,12 +96,12 @@ pub fn build(builder: *std.Build) !void {
         "-fno-sanitize=undefined",
     };
 
-    const glslang_dep = builder.dependency("glslang", .{
+    const glslang_dep = builder.dependency("glslang_zig", .{
         .target = target,
         .optimize = optimize,
     });
 
-    const spirv_dep = builder.dependency("spirv", .{
+    const spirv_dep = builder.dependency("spirv_zig", .{
         .target = target,
         .optimize = optimize,
     });
