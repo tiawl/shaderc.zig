@@ -9,8 +9,7 @@
     },
     .dependencies = .{
         .toolbox = .{
-            .url = "git+https://github.com/tiawl/toolbox#c8baec69c17c44868bb55bcb2817a91a5da7659d",
-            .hash = "toolbox-1.11.2-kRAu4O9KAACKEtHa6mMiIWOJ-PXIAGfykU7I7axiXJzA",
+            .url = "git+https://github.com/tiawl/toolbox#d310d02d1d3e0b88272b85e2ab11db6a6e1c255c",
         },
         .glslang = .{
             .url = "https://github.com/tiawl/glslang.zig/archive/10b43d77eca7e30b53a613f55f221f0b44fd3713.tar.gz",
