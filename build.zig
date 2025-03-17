@@ -55,7 +55,7 @@ pub fn build(builder: *std.Build) !void {
         "shaderc",
     });
 
-    const dependencies = try toolbox.Dependencies.init(builder, "shaderc.zig", &.{
+    const dependencies = try toolbox.Dependencies.init(builder, .shaderc_zig, "0x3dd9ee4ee37ce998", &.{
         "shaderc",
     }, .{
         .toolbox = .{
