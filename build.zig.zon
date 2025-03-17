@@ -13,12 +13,12 @@
             .hash = "toolbox-1.11.2-kRAu4CVLAAC8cC-LITQL_lNOAKx1v9t6VTWfq1Q4uiJR",
         },
         .glslang_zig = .{
-            .url = "https://github.com/tiawl/glslang.zig/archive/e75f3155699205b73e6dc0c0e1480dfb6516cbec.tar.gz",
-            .hash = "glslang_zig-1.0.0-QiUC6t8tWADex4NZq5OD6UTpFlYtg_OXa8BBMr6SOz51",
+            .url = "git+https://github.com/tiawl/glslang.zig#f46191c066e4d18dcab585cff165064766fab043",
+            .hash = "glslang_zig-1.0.0-QiUC6ustWABhRPdZnylJy7zr-owsfunSnDmmPqqCn-ty",
         },
         .spirv_zig = .{
-            .url = "https://github.com/tiawl/spirv.zig/archive/e2f82015fe8e4b50cd33d8be62331d0c6ee18f03.tar.gz",
-            .hash = "spirv_zig-1.0.0-u_xqh84LZgAAGJfGx1tRiAyR8mqpEe31OS9j8DmBx20J",
+            .url = "git+https://github.com/tiawl/spirv.zig#fb439094c7a78f3d7d8edb5391bd35c7867a6cf7",
+            .hash = "spirv_zig-1.0.0-u_xqh9kLZgBH2KO6sXi2zgNjqxLsaZdXhLFV3abqhVQ-",
         },
     },
     .fingerprint = 0x3dd9ee4ee37ce998,
