@@ -13,7 +13,7 @@ The intention under this fork is to package [google/shaderc][1] for [Zig][2]. So
 
 The goal of this repository is not to provide a [Zig][2] binding for [google/shaderc][1]. There are at least as many legit ways as possible to make a binding as there are active accounts on Github. So you are not going to find an answer for this question here. The point of this repository is to abstract the [google/shaderc][1] compilation process with [Zig][2] (which is not new comers friendly and not easy to maintain) to let you focus on your application. So you can use **shaderc.zig**:
 - as raw (no available example, open an issue if you are interested in, we will be happy to help you),
-- as a daily updated interface for your [Zig][2] binding of [google/shaderc][1] (see [here][11] for a private usage).
+- as a daily updated interface for your [Zig][2] binding of [google/shaderc][1] (see [here][7] for a private usage).
 
 ## Dependencies
 
@@ -32,10 +32,6 @@ This repository is automatically updated when a new release is available from th
 * [tiawl/toolbox][4]
 * [tiawl/glslang.zig][5]
 * [tiawl/spirv.zig][6]
-* [tiawl/spaceporn-action-bot][7]
-* [tiawl/spaceporn-action-ci][8]
-* [tiawl/spaceporn-action-cd-ping][9]
-* [tiawl/spaceporn-action-cd-pong][10]
 
 ## `zig build` options
 
@@ -59,8 +55,4 @@ The parts of this repository originated from this repository are dedicated to th
 [4]:https://github.com/tiawl/toolbox
 [5]:https://github.com/tiawl/glslang.zig
 [6]:https://github.com/tiawl/spirv.zig
-[7]:https://github.com/tiawl/spaceporn-action-bot
-[8]:https://github.com/tiawl/spaceporn-action-ci
-[9]:https://github.com/tiawl/spaceporn-action-cd-ping
-[10]:https://github.com/tiawl/spaceporn-action-cd-pong
-[11]:https://github.com/tiawl/spaceporn/blob/trunk/src/compiler/bindings/shaderc/shaderc.zig
+[7]:https://github.com/tiawl/spaceporn/blob/trunk/src/compiler/bindings/shaderc/shaderc.zig
