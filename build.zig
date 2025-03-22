@@ -79,9 +79,7 @@ pub fn build(builder: *std.Build) !void {
         "shaderc",
     });
 
-    if (toolbox.instance().ptrBuilder().option(bool, "update", "Update binding") orelse false) {
-        try update(shaderc_path, &dependencies);
-    }
+    if (toolbox.instance().getUpdate()) try update(shaderc_path, &dependencies);
 
     const lib = toolbox.instance().ptrBuilder().addStaticLibrary(.{
         .name = "shaderc",
