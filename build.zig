@@ -4,18 +4,18 @@ const toolbox = @import("toolbox");
 fn update(builder: *std.Build, shaderc_path: []const u8, dependencies: *const toolbox.Dependencies) !void {
     std.fs.deleteTreeAbsolute(shaderc_path) catch |err|
         {
-        switch (err) {
-            error.FileNotFound => {},
-            else => return err,
-        }
-    };
+            switch (err) {
+                error.FileNotFound => {},
+                else => return err,
+            }
+        };
 
     try dependencies.clone(builder, "shaderc", shaderc_path);
 
     var shaderc_dir =
         try std.fs.openDirAbsolute(shaderc_path, .{
-        .iterate = true,
-    });
+            .iterate = true,
+        });
     defer shaderc_dir.close();
 
     var it = shaderc_dir.iterate();
@@ -52,8 +52,8 @@ pub fn build(builder: *std.Build) !void {
 
     const shaderc_path =
         try builder.build_root.join(builder.allocator, &.{
-        "shaderc",
-    });
+            "shaderc",
+        });
 
     const dependencies = try toolbox.Dependencies.init(builder, .shaderc_zig, "0x3dd9ee4ee37ce998", &.{
         "shaderc",
