@@ -3,8 +3,8 @@
     .version = "1.0.0",
     .dependencies = .{
         .glslang_zig = .{
-            .url = "git+https://github.com/tiawl/glslang.zig#c05ec7389c2f2a63ddfdbf5901f3460789ffc3c1",
-            .hash = "glslang_zig-1.0.0-QiUC6vAtWABoVeqJd-S9Gy2y_ynP2B6FbUIwSrirPgcC",
+            .url = "git+https://github.com/tiawl/glslang.zig?ref=zig-0.14.0#55cbf7bab0cf30e0d31b23910c45a2b78a5e2cc7",
+            .hash = "glslang_zig-1.0.0-QiUC6vctWACNkZFL3p4PXrMBbkuubyHCZqIYRyparGjp",
         },
         .toolbox = .{
             .url = "git+https://github.com/tiawl/toolbox?ref=1.12.0#41878a6e482a6e07a5aab5d73aceaf12fcab47f3",
