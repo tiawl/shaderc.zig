@@ -1,7 +1,7 @@
 const std = @import("std");
 const toolbox = @import("toolbox");
 
-fn update(shaderc_path: []const u8, dependencies: *const toolbox.Dependencies) !void {
+fn update(shaderc_path: []const u8) !void {
     std.fs.deleteTreeAbsolute(shaderc_path) catch |err| {
         switch (err) {
             error.FileNotFound => {},
@@ -9,7 +9,7 @@ fn update(shaderc_path: []const u8, dependencies: *const toolbox.Dependencies) !
         }
     };
 
-    try dependencies.clone("shaderc", shaderc_path);
+    try toolbox.instance().clone("shaderc", shaderc_path);
 
     var shaderc_dir = try std.fs.openDirAbsolute(shaderc_path, .{
         .iterate = true,
@@ -43,45 +43,50 @@ fn update(shaderc_path: []const u8, dependencies: *const toolbox.Dependencies) !
     });
 }
 
+const FromZon = toolbox.Repositories(.{
+    .toolbox, .glslang_zig, .spirv_zig,
+});
+
+const DuringExec = toolbox.Repositories(.{
+    .shaderc,
+});
+
 pub fn build(builder: *std.Build) !void {
     const target = builder.standardTargetOptions(.{});
     const optimize = builder.standardOptimizeOption(.{});
 
-    toolbox.init(builder, optimize);
-    defer toolbox.deinit();
-    const dependencies = try toolbox.Dependencies.init(.shaderc_zig, "0x3dd9ee4ee37ce998", &.{
+    try toolbox.init(FromZon, DuringExec, builder, optimize, .shaderc_zig, "0x3dd9ee4ee37ce998", &.{
         "shaderc",
     }, .{
         .toolbox = .{
             .name = "tiawl/toolbox",
-            .host = toolbox.Repository.Host.github,
-            .ref = toolbox.Repository.Reference.tag,
+            .host = .github,
+            .ref = .tag,
         },
         .glslang_zig = .{
             .name = "tiawl/glslang.zig",
-            .host = toolbox.Repository.Host.github,
-            .ref = toolbox.Repository.Reference.tag,
+            .host = .github,
+            .ref = .tag,
         },
         .spirv_zig = .{
             .name = "tiawl/spirv.zig",
-            .host = toolbox.Repository.Host.github,
-            .ref = toolbox.Repository.Reference.tag,
+            .host = .github,
+            .ref = .tag,
         },
     }, .{
         .shaderc = .{
             .name = "google/shaderc",
-            .host = toolbox.Repository.Host.github,
-            .ref = toolbox.Repository.Reference.tag,
+            .host = .github,
+            .ref = .tag,
         },
     });
+    defer toolbox.deinit();
 
     const shaderc_path = try toolbox.instance().getBuilder().build_root.join(toolbox.instance().getBuilder().allocator, &.{
         "shaderc",
     });
 
-    if (toolbox.instance().ptrBuilder().option(bool, "update", "Update binding") orelse false) {
-        try update(shaderc_path, &dependencies);
-    }
+    if (toolbox.instance().getUpdate()) try update(shaderc_path);
 
     const lib = toolbox.instance().ptrBuilder().addStaticLibrary(.{
         .name = "shaderc",
