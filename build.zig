@@ -9,7 +9,7 @@ fn update(shaderc_path: []const u8) !void {
         }
     };
 
-    try toolbox.instance().clone("shaderc", shaderc_path);
+    try toolbox.instance().clone(.shaderc, shaderc_path);
 
     var shaderc_dir = try std.fs.openDirAbsolute(shaderc_path, .{
         .iterate = true,
@@ -19,7 +19,7 @@ fn update(shaderc_path: []const u8) !void {
     var it = shaderc_dir.iterate();
     while (try it.next()) |*entry| {
         if (!std.mem.startsWith(u8, entry.name, "libshaderc")) {
-            try std.fs.deleteTreeAbsolute(toolbox.instance().ptrBuilder().pathJoin(&.{
+            try std.fs.deleteTreeAbsolute(toolbox.instance().pathJoin(&.{
                 shaderc_path, entry.name,
             }));
         }
@@ -30,7 +30,7 @@ fn update(shaderc_path: []const u8) !void {
 
     while (try walker.next()) |*entry| {
         if ((entry.kind == .file) and ((std.mem.indexOf(u8, entry.basename, "test") != null) or toolbox.isCppHeader(entry.basename))) {
-            try std.fs.deleteFileAbsolute(toolbox.instance().ptrBuilder().pathJoin(&.{
+            try std.fs.deleteFileAbsolute(toolbox.instance().pathJoin(&.{
                 shaderc_path, entry.path,
             }));
         }
@@ -82,15 +82,15 @@ pub fn build(builder: *std.Build) !void {
     });
     defer toolbox.deinit();
 
-    const shaderc_path = try toolbox.instance().getBuilder().build_root.join(toolbox.instance().getBuilder().allocator, &.{
+    const shaderc_path = try builder.build_root.join(builder.allocator, &.{
         "shaderc",
     });
 
     if (toolbox.instance().getUpdate()) try update(shaderc_path);
 
-    const lib = toolbox.instance().ptrBuilder().addStaticLibrary(.{
+    const lib = builder.addStaticLibrary(.{
         .name = "shaderc",
-        .root_source_file = toolbox.instance().ptrBuilder().addWriteFiles().add("empty.c", ""),
+        .root_source_file = builder.addWriteFiles().add("empty.c", ""),
         .target = target,
         .optimize = optimize,
     });
@@ -99,12 +99,12 @@ pub fn build(builder: *std.Build) !void {
         "-DENABLE_HLSL", "-fno-sanitize=undefined",
     };
 
-    const glslang_dep = toolbox.instance().ptrBuilder().dependency("glslang_zig", .{
+    const glslang_dep = builder.dependency("glslang_zig", .{
         .target = target,
         .optimize = optimize,
     });
 
-    const spirv_dep = toolbox.instance().ptrBuilder().dependency("spirv_zig", .{
+    const spirv_dep = builder.dependency("spirv_zig", .{
         .target = target,
         .optimize = optimize,
     });
@@ -117,29 +117,29 @@ pub fn build(builder: *std.Build) !void {
     lib.installLibraryHeaders(spirv_compile_step);
 
     for ([_][]const u8{
-        toolbox.instance().ptrBuilder().pathJoin(&.{
+        builder.pathJoin(&.{
             "shaderc", "libshaderc", "include",
         }),
-        toolbox.instance().ptrBuilder().pathJoin(&.{
+        builder.pathJoin(&.{
             "shaderc", "libshaderc_util", "include",
         }),
     }) |include| {
         toolbox.instance().addInclude(lib, include);
     }
 
-    const libshaderc_path = toolbox.instance().ptrBuilder().pathJoin(&.{
+    const libshaderc_path = builder.pathJoin(&.{
         shaderc_path, "libshaderc",
     });
-    toolbox.instance().addHeader(lib, toolbox.instance().ptrBuilder().pathJoin(&.{
+    toolbox.instance().addHeader(lib, builder.pathJoin(&.{
         libshaderc_path, "include", "shaderc",
     }), "shaderc", &.{
         ".h",
     });
 
-    const libshaderc_util_path = toolbox.instance().ptrBuilder().pathJoin(&.{
+    const libshaderc_util_path = builder.pathJoin(&.{
         shaderc_path, "libshaderc_util",
     });
-    toolbox.instance().addHeader(lib, toolbox.instance().ptrBuilder().pathJoin(&.{
+    toolbox.instance().addHeader(lib, builder.pathJoin(&.{
         libshaderc_util_path, "include", "libshaderc_util",
     }), "libshaderc_util", &.{
         ".h",
@@ -156,7 +156,7 @@ pub fn build(builder: *std.Build) !void {
         });
         defer dir.close();
 
-        walker = try dir.walk(toolbox.instance().getBuilder().allocator);
+        walker = try dir.walk(builder.allocator);
         defer walker.deinit();
 
         while (try walker.next()) |*entry| {
@@ -171,5 +171,5 @@ pub fn build(builder: *std.Build) !void {
         }
     }
 
-    toolbox.instance().ptrBuilder().installArtifact(lib);
+    builder.installArtifact(lib);
 }
