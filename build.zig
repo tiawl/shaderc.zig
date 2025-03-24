@@ -1,7 +1,8 @@
 const std = @import("std");
-const toolbox = @import("toolbox");
+const toolbox_pkg = @import("toolbox");
+const Toolbox = toolbox_pkg.Toolbox;
 
-fn update(shaderc_path: []const u8) !void {
+fn update(toolbox: *Toolbox, shaderc_path: []const u8) !void {
     std.fs.deleteTreeAbsolute(shaderc_path) catch |err| {
         switch (err) {
             error.FileNotFound => {},
@@ -9,7 +10,7 @@ fn update(shaderc_path: []const u8) !void {
         }
     };
 
-    try toolbox.instance().clone(.shaderc, shaderc_path);
+    try toolbox.clone(.shaderc, shaderc_path);
 
     var shaderc_dir = try std.fs.openDirAbsolute(shaderc_path, .{
         .iterate = true,
@@ -19,35 +20,35 @@ fn update(shaderc_path: []const u8) !void {
     var it = shaderc_dir.iterate();
     while (try it.next()) |*entry| {
         if (!std.mem.startsWith(u8, entry.name, "libshaderc")) {
-            try std.fs.deleteTreeAbsolute(toolbox.instance().pathJoin(&.{
+            try std.fs.deleteTreeAbsolute(toolbox.pathJoin(&.{
                 shaderc_path, entry.name,
             }));
         }
     }
 
-    var walker = try shaderc_dir.walk(toolbox.instance().getBuilder().allocator);
+    var walker = try shaderc_dir.walk(toolbox.getBuilder().allocator);
     defer walker.deinit();
 
     while (try walker.next()) |*entry| {
-        if ((entry.kind == .file) and ((std.mem.indexOf(u8, entry.basename, "test") != null) or toolbox.isCppHeader(entry.basename))) {
-            try std.fs.deleteFileAbsolute(toolbox.instance().pathJoin(&.{
+        if ((entry.kind == .file) and ((std.mem.indexOf(u8, entry.basename, "test") != null) or toolbox_pkg.isCppHeader(entry.basename))) {
+            try std.fs.deleteFileAbsolute(toolbox.pathJoin(&.{
                 shaderc_path, entry.path,
             }));
         }
     }
 
-    try toolbox.instance().clean(&.{
+    try toolbox.clean(&.{
         "shaderc",
     }, &.{
         ".inc",
     });
 }
 
-const FromZon = toolbox.Repositories(.{
+const FromZon = toolbox_pkg.Repositories(.{
     .toolbox, .glslang_zig, .spirv_zig,
 });
 
-const DuringExec = toolbox.Repositories(.{
+const DuringExec = toolbox_pkg.Repositories(.{
     .shaderc,
 });
 
@@ -55,7 +56,7 @@ pub fn build(builder: *std.Build) !void {
     const target = builder.standardTargetOptions(.{});
     const optimize = builder.standardOptimizeOption(.{});
 
-    try toolbox.init(FromZon, DuringExec, builder, optimize, .shaderc_zig, "0x3dd9ee4ee37ce998", &.{
+    var toolbox = try Toolbox.init(FromZon, DuringExec, builder, optimize, .shaderc_zig, "0x3dd9ee4ee37ce998", &.{
         "shaderc",
     }, .{
         .toolbox = .{
@@ -86,7 +87,7 @@ pub fn build(builder: *std.Build) !void {
         "shaderc",
     });
 
-    if (toolbox.instance().getUpdate()) try update(shaderc_path);
+    if (toolbox.getUpdate()) try update(&toolbox, shaderc_path);
 
     const lib = builder.addStaticLibrary(.{
         .name = "shaderc",
@@ -124,13 +125,13 @@ pub fn build(builder: *std.Build) !void {
             "shaderc", "libshaderc_util", "include",
         }),
     }) |include| {
-        toolbox.instance().addInclude(lib, include);
+        toolbox.addInclude(lib, include);
     }
 
     const libshaderc_path = builder.pathJoin(&.{
         shaderc_path, "libshaderc",
     });
-    toolbox.instance().addHeader(lib, builder.pathJoin(&.{
+    toolbox.addHeader(lib, builder.pathJoin(&.{
         libshaderc_path, "include", "shaderc",
     }), "shaderc", &.{
         ".h",
@@ -139,7 +140,7 @@ pub fn build(builder: *std.Build) !void {
     const libshaderc_util_path = builder.pathJoin(&.{
         shaderc_path, "libshaderc_util",
     });
-    toolbox.instance().addHeader(lib, builder.pathJoin(&.{
+    toolbox.addHeader(lib, builder.pathJoin(&.{
         libshaderc_util_path, "include", "libshaderc_util",
     }), "libshaderc_util", &.{
         ".h",
@@ -162,8 +163,8 @@ pub fn build(builder: *std.Build) !void {
         while (try walker.next()) |*entry| {
             switch (entry.kind) {
                 .file => {
-                    if (toolbox.isCppSource(entry.basename)) {
-                        try toolbox.instance().addSource(lib, path, entry.path, &flags);
+                    if (toolbox_pkg.isCppSource(entry.basename)) {
+                        try toolbox.addSource(lib, path, entry.path, &flags);
                     }
                 },
                 else => {},
