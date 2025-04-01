@@ -7,8 +7,8 @@
             .hash = "glslang_zig-1.0.0-QiUC6swrWAB6TwiqhDp0Py4H7s5387O5FOCEIodXoPiE",
         },
         .toolbox = .{
-            .url = "git+https://github.com/tiawl/toolbox?ref=1.12.2#67d692be90930554cff32282bcf31e230354bc5c",
-            .hash = "toolbox-1.12.2-kRAu4GRZAAAiIQjk8qdsjXVdSro7DI9pI8J82LGG4k4j",
+            .url = "git+https://github.com/tiawl/toolbox?ref=1.12.3#f5e5a5d604a274bc7a5a8ed975691537779c5d5c",
+            .hash = "toolbox-1.12.2-kRAu4CBaAADV5SqeC0c0SVLw08j8MP2hcGZxNv9V4y7A",
         },
         .spirv_zig = .{
             .url = "git+https://github.com/tiawl/spirv.zig?ref=toolbox-1.12.2#5dc2d06e574893f3c4554e89b2024454b348ff88",
