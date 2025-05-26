@@ -15,7 +15,7 @@
             .hash = "spirv_zig-1.0.0-u_xqh-7RaQB-8CngE8GIv-nic4fHyQZNYK7pcn8ECltK",
         },
     },
-    .minimum_zig_version = "0.14.1",
+    .minimum_zig_version = "0.14.0",
     .fingerprint = 0x3dd9ee4ee37ce998,
     .paths = .{
         "build.zig",
