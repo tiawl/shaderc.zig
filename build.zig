@@ -89,11 +89,13 @@ pub fn build(builder: *std.Build) !void {
 
     if (toolbox.getUpdate()) try update(&toolbox, shaderc_path);
 
-    const lib = builder.addStaticLibrary(.{
+    const lib = builder.addLibrary(.{
         .name = "shaderc",
-        .root_source_file = builder.addWriteFiles().add("empty.c", ""),
-        .target = target,
-        .optimize = optimize,
+        .root_module = std.Build.Module.create(builder, .{
+            .root_source_file = builder.addWriteFiles().add("empty.zig", ""),
+            .target = target,
+            .optimize = optimize,
+        }),
     });
 
     const flags = [_][]const u8{
