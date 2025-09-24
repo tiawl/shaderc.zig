@@ -11,8 +11,8 @@
             .hash = "toolbox-1.12.6-kRAu4BJbAAAGPWPltdn1vwY83xau2Zh9015JTQ0MZjyM",
         },
         .spirv_zig = .{
-            .url = "git+https://github.com/tiawl/spirv.zig?ref=toolbox-1.12.6#33bcaa83f402f2ef34aa3dac760074e2cd379ba1",
-            .hash = "spirv_zig-1.0.0-u_xqh1TXdwD3nv3R4E7lGABdA_XwKoLFPAh0a-f4O6Xg",
+            .url = "git+https://github.com/tiawl/spirv.zig?ref=v2025.4#97803bb81a8e1a756a9c055327414f13f3f7ebe7",
+            .hash = "spirv_zig-1.0.0-u_xqh-mAeAANKIsJPZJisaZ3ClFxg5XEwyjNj7YhwJGi",
         },
     },
     .minimum_zig_version = "0.15.1",
