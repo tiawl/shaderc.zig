@@ -12,12 +12,12 @@ The intention under this fork is to package [google/shaderc][1] for [Zig][2]. So
 ## How to use it
 
 The goal of this repository is not to provide a [Zig][2] binding for [google/shaderc][1]. There are at least as many legit ways as possible to make a binding as there are active accounts on Github. So you are not going to find an answer for this question here. The point of this repository is to abstract the [google/shaderc][1] compilation process with [Zig][2] (which is not new comers friendly and not easy to maintain) to let you focus on your application. So you can use **shaderc.zig**:
-- as raw (no available example, open an issue if you are interested in, we will be happy to help you),
-- as a daily updated interface for your [Zig][2] binding of [google/shaderc][1] (see [here][7] for a private usage).
+- as raw (see into the `example` directory),
+- as a daily updated interface for your [Zig][2] binding of [google/shaderc][1].
 
 ## Dependencies
 
-The [Zig][2] part of this package is relying on the latest [Zig][2] release (0.15.1) and will only be updated for the next one.
+The [Zig][2] part of this package is relying on the latest [Zig][2] release (0.15.2) and will only be updated for the next one.
 
 Here the repositories' version used by this fork:
 * [google/shaderc](https://github.com/tiawl/shaderc.zig/blob/trunk/.references/shaderc)

@@ -10,43 +10,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: mlugg/setup-zig@v2.0.5
+    - uses: mlugg/setup-zig@v2
     - name: Check zig is canonical
       shell: bash
       run: |
         zig fmt --check .
-  build:
-    strategy:
-      matrix:
-        repo:
-          - spaceporn
-        os:
-          - ubuntu-latest
-          - windows-latest
-        zig_opts:
-          - ''
-          - '-Ddev'
-          - '-Dturbo'
-    runs-on: "${{ matrix.os }}"
+  example:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-      with:
-        repository: "${{ github.repository_owner }}/${{ matrix.repo }}"
-
-    - name: Setup Zig
-      uses: mlugg/setup-zig@v2.0.5
-
-    - name: Prepare ${{ matrix.repo }}/build.zig.zon
-      env:
-        URL: "git+${{ github.server_url }}/${{ github.repository }}#${{ github.event.pull_request.head.sha }}"
+    - uses: mlugg/setup-zig@v2
+    - name: Test building example
       shell: bash
       run: |
-        zig fetch --save "${URL}"
+        unset ZIG_LOCAL_CACHE_DIR
+        env -C "${GITHUB_WORKSPACE}/example" zig build
+  maintainance:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Zig
+      uses: mlugg/setup-zig@v2
 
-    - name: Test building ${{ matrix.repo }}
-      env:
-        OPTIONS: "${{ matrix.zig_opts }}"
-        RUNNER_TMP: "${{ runner.temp }}"
-      shell: bash
-      run:
-        zig build ${OPTIONS}
+    - name: Test updating
+      shell: 'bash'
+      run: |
+        zig build -Dupdate -Dverbose
+
+    - name: Test fetching
+      shell: 'bash'
+      run: |
+        zig build -Dfetch -Dverbose

@@ -1,178 +1,72 @@
 const std = @import("std");
-const toolbox_pkg = @import("toolbox");
-const Toolbox = toolbox_pkg.Toolbox;
+const build_zig_zon = @import("build.zig.zon");
+const toolbox = @import("toolbox");
+const VerboseBuilder = toolbox.VerboseBuilder;
 
-fn update(toolbox: *Toolbox, shaderc_path: []const u8) !void {
-    std.fs.deleteTreeAbsolute(shaderc_path) catch |err| {
-        switch (err) {
-            error.FileNotFound => {},
-            else => return err,
-        }
-    };
+fn updateFn(pkg_builder: *VerboseBuilder) !void {
+    try pkg_builder.remove(&.{"shaderc"});
+    try pkg_builder.make(&.{"shaderc"});
+    try pkg_builder.make(&.{ "shaderc", "libshaderc" });
+    try pkg_builder.make(&.{ "shaderc", "libshaderc_util" });
 
-    try toolbox.clone(.shaderc, shaderc_path);
+    const shaderc_dep = pkg_builder.verboseDependency("shaderc");
+    var shaderc_builder = VerboseBuilder.initFromDependency(shaderc_dep);
 
-    var shaderc_dir = try std.fs.openDirAbsolute(shaderc_path, .{
-        .iterate = true,
-    });
-    defer shaderc_dir.close();
-
-    var it = shaderc_dir.iterate();
-    while (try it.next()) |*entry| {
-        if (!std.mem.startsWith(u8, entry.name, "libshaderc")) {
-            try std.fs.deleteTreeAbsolute(toolbox.pathJoin(&.{
-                shaderc_path, entry.name,
-            }));
+    for ([_][]const u8{ "libshaderc", "libshaderc_util" }) |dir| {
+        while (try shaderc_builder.walk(&.{dir})) |entry| {
+            switch (entry.kind) {
+                .file => if ((toolbox.isCHeader(entry.basename) or toolbox.isCOrCppSource(entry.basename) or toolbox.isIncludeFile(entry.basename)) and std.mem.indexOf(u8, entry.basename, "test") == null) {
+                    try pkg_builder.copy(&.{ "shaderc", dir, entry.path }, &shaderc_builder, &.{ dir, entry.path });
+                },
+                .directory => try pkg_builder.make(&.{ "shaderc", dir, entry.path }),
+                else => {},
+            }
         }
     }
-
-    var walker = try shaderc_dir.walk(toolbox.getBuilder().allocator);
-    defer walker.deinit();
-
-    while (try walker.next()) |*entry| {
-        if ((entry.kind == .file) and ((std.mem.indexOf(u8, entry.basename, "test") != null) or toolbox_pkg.isCppHeader(entry.basename))) {
-            try std.fs.deleteFileAbsolute(toolbox.pathJoin(&.{
-                shaderc_path, entry.path,
-            }));
-        }
-    }
-
-    try toolbox.clean(&.{
-        "shaderc",
-    }, &.{
-        ".inc",
-    });
 }
 
-const FromZon = toolbox_pkg.Repositories(.{
-    .toolbox, .glslang_zig, .spirv_zig,
-});
+fn buildFn(pkg_builder: *VerboseBuilder) !void {
+    const lib = pkg_builder.addLibrary("shaderc");
 
-const DuringExec = toolbox_pkg.Repositories(.{
-    .shaderc,
-});
+    const glslang_dep = pkg_builder.verboseDependency("glslang_zig");
+    const spirv_dep = pkg_builder.verboseDependency("spirv_zig");
+    const glslang_artifact = pkg_builder.artifact(glslang_dep, "glslang");
+    const spirv_artifact = pkg_builder.artifact(spirv_dep, "spirv");
 
-pub fn build(builder: *std.Build) !void {
-    const target = builder.standardTargetOptions(.{});
-    const optimize = builder.standardOptimizeOption(.{});
+    pkg_builder.linkLibrary(lib, glslang_artifact);
+    pkg_builder.linkLibrary(lib, spirv_artifact);
+    pkg_builder.installLibraryHeaders(lib, glslang_artifact);
+    pkg_builder.installLibraryHeaders(lib, spirv_artifact);
 
-    var toolbox = try Toolbox.init(FromZon, DuringExec, builder, optimize, .shaderc_zig, "0x3dd9ee4ee37ce998", &.{
-        "shaderc",
-    }, .{
-        .toolbox = .{
-            .name = "tiawl/toolbox",
-            .host = .github,
-            .ref = .tag,
-        },
-        .glslang_zig = .{
-            .name = "tiawl/glslang.zig",
-            .host = .github,
-            .ref = .tag,
-        },
-        .spirv_zig = .{
-            .name = "tiawl/spirv.zig",
-            .host = .github,
-            .ref = .tag,
-        },
-    }, .{
-        .shaderc = .{
-            .name = "google/shaderc",
-            .host = .github,
-            .ref = .tag,
-        },
-    });
-    defer toolbox.deinit();
+    pkg_builder.addInclude(lib, &.{ "shaderc", "libshaderc", "include" });
+    pkg_builder.addInclude(lib, &.{ "shaderc", "libshaderc_util", "include" });
 
-    const shaderc_path = try builder.build_root.join(builder.allocator, &.{
-        "shaderc",
-    });
-
-    if (toolbox.getUpdate()) try update(&toolbox, shaderc_path);
-
-    const lib = builder.addLibrary(.{
-        .name = "shaderc",
-        .root_module = std.Build.Module.create(builder, .{
-            .root_source_file = builder.addWriteFiles().add("empty.zig", ""),
-            .target = target,
-            .optimize = optimize,
-        }),
-    });
-
-    const flags = [_][]const u8{
-        "-DENABLE_HLSL", "-fno-sanitize=undefined",
-    };
-
-    const glslang_dep = builder.dependency("glslang_zig", .{
-        .target = target,
-        .optimize = optimize,
-    });
-
-    const spirv_dep = builder.dependency("spirv_zig", .{
-        .target = target,
-        .optimize = optimize,
-    });
-
-    const glslang_compile_step = glslang_dep.artifact("glslang");
-    const spirv_compile_step = spirv_dep.artifact("spirv");
-    lib.linkLibrary(glslang_compile_step);
-    lib.installLibraryHeaders(glslang_compile_step);
-    lib.linkLibrary(spirv_compile_step);
-    lib.installLibraryHeaders(spirv_compile_step);
-
-    for ([_][]const u8{
-        builder.pathJoin(&.{
-            "shaderc", "libshaderc", "include",
-        }),
-        builder.pathJoin(&.{
-            "shaderc", "libshaderc_util", "include",
-        }),
-    }) |include| {
-        toolbox.addInclude(lib, include);
+    while (try pkg_builder.walk(&.{ "shaderc", "libshaderc", "include", "shaderc" })) |*entry| {
+        if (toolbox.isCHeader(entry.basename)) pkg_builder.installHeader(lib, &.{ "shaderc", "libshaderc", "include", "shaderc", entry.path }, &.{ "shaderc", entry.path });
     }
 
-    const libshaderc_path = builder.pathJoin(&.{
-        shaderc_path, "libshaderc",
-    });
-    toolbox.addHeader(lib, builder.pathJoin(&.{
-        libshaderc_path, "include", "shaderc",
-    }), "shaderc", &.{
-        ".h",
-    });
+    while (try pkg_builder.walk(&.{ "shaderc", "libshaderc_util", "include", "libshaderc_util" })) |*entry| {
+        if (toolbox.isCHeader(entry.basename)) pkg_builder.installHeader(lib, &.{ "shaderc", "libshaderc_util", "include", "libshaderc_util", entry.path }, &.{ "libshaderc_util", entry.path });
+    }
 
-    const libshaderc_util_path = builder.pathJoin(&.{
-        shaderc_path, "libshaderc_util",
-    });
-    toolbox.addHeader(lib, builder.pathJoin(&.{
-        libshaderc_util_path, "include", "libshaderc_util",
-    }), "libshaderc_util", &.{
-        ".h",
-    });
-
-    var dir: std.fs.Dir = undefined;
-    var walker: std.fs.Dir.Walker = undefined;
-
-    for ([_][]const u8{
-        libshaderc_path, libshaderc_util_path,
-    }) |path| {
-        dir = try std.fs.openDirAbsolute(path, .{
-            .iterate = true,
-        });
-        defer dir.close();
-
-        walker = try dir.walk(builder.allocator);
-        defer walker.deinit();
-
-        while (try walker.next()) |*entry| {
+    for ([_][]const u8{ "libshaderc", "libshaderc_util" }) |dir| {
+        while (try pkg_builder.walk(&.{ "shaderc", dir })) |*entry| {
             switch (entry.kind) {
-                .file => {
-                    if (toolbox_pkg.isCppSource(entry.basename)) {
-                        try toolbox.addSource(lib, path, entry.path, &flags);
-                    }
+                .file => if (toolbox.isCppSource(entry.basename)) {
+                    pkg_builder.addCSource(lib, &.{ "shaderc", dir, entry.path }, &.{ "-DENABLE_HLSL", "-fno-sanitize=undefined" });
                 },
                 else => {},
             }
         }
     }
 
-    builder.installArtifact(lib);
+    pkg_builder.installArtifact(lib);
+}
+
+pub fn build(builder: *std.Build) !void {
+    var pkg_builder = try VerboseBuilder.init(builder, build_zig_zon, buildFn, updateFn);
+
+    try pkg_builder.fetch(build_zig_zon);
+    try pkg_builder.update();
+    try pkg_builder.build();
 }
