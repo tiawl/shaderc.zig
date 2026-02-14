@@ -2,20 +2,24 @@
     .name = .shaderc_zig,
     .version = "1.0.0",
     .dependencies = .{
-        .glslang_zig = .{
-            .url = "git+https://github.com/tiawl/glslang.zig?ref=16.2.0#73adeb93ef32f6a993a49457446d0e96c672262d",
-            .hash = "glslang_zig-1.0.0-QiUC6u_VXgBoZPDPPkc-3uNlM8I_K-js57BO6s-MEaQh",
+        .shaderc = .{
+            .url = "git+https://github.com/google/shaderc?ref=v2026.1#301b4ede53d59b68bf55f95bb26412d9233c8187",
+            .hash = "N-V-__8AAAh4EgD_1vyfeRQed3y6urhGewfbgX0yP6g04hGv",
         },
         .toolbox = .{
-            .url = "git+https://github.com/tiawl/toolbox?ref=1.12.6#79c1dffe608a9c4a7dcf11f98f1dc88b9b46e9f5",
-            .hash = "toolbox-1.12.6-kRAu4BJbAAAGPWPltdn1vwY83xau2Zh9015JTQ0MZjyM",
+            .url = "git+https://github.com/tiawl/toolbox#c40e214efcaf902c455dc9ba3dc1ddf64bb3bf25",
+            .hash = "toolbox-2.0.0-kRAu4Cp6AAAOOwydlP8GG2SVXq82AhgeA_C6ABUpDZhH",
         },
         .spirv_zig = .{
-            .url = "git+https://github.com/tiawl/spirv.zig?ref=v2026.1#e9a708ad59af930608d61fdb3c5a635222c6530e",
-            .hash = "spirv_zig-1.0.0-u_xqh-fJfAA7gbrgdh9SkBCe_Lqzr7ZiNbJjqkJ8tjEM",
+            .url = "git+https://github.com/tiawl/spirv.zig#61dbe491192d4ed9795a5a425c3cfdb7073a74b8",
+            .hash = "spirv_zig-1.0.0-u_xqhypxfQCUFgIcMGTS4BoKigMvqmYqHVzgOqMJ5wVU",
+        },
+        .glslang_zig = .{
+            .url = "git+https://github.com/tiawl/glslang.zig#d713189ca6d670d8f1aa9c3f16a7ae1b302b5838",
+            .hash = "glslang_zig-1.0.0-QiUC6rTRXgAlK0Vw0-9tDRtZIpbnFNxIEUBb19NOHc9R",
         },
     },
-    .minimum_zig_version = "0.15.1",
+    .minimum_zig_version = "0.15.2",
     .fingerprint = 0x3dd9ee4ee37ce998,
     .paths = .{
         "build.zig",

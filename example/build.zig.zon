@@ -1,0 +1,13 @@
+.{
+    .name = .example,
+    .version = "1.0.0",
+    .fingerprint = 0x6eec9b9f4f7afcff,
+    .dependencies = .{
+        .shaderc_zig = .{
+            .path = "..",
+        },
+    },
+    .paths = .{
+        "",
+    },
+}
