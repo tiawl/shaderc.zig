@@ -25,6 +25,9 @@ jobs:
       run: |
         unset ZIG_LOCAL_CACHE_DIR
         env -C "${GITHUB_WORKSPACE}/example" zig build
+        set -f
+        ${GITHUB_WORKSPACE}/example/zig-out/bin/example
+        set +f
   maintainance:
     runs-on: ubuntu-latest
     steps:
