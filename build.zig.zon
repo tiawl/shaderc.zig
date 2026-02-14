@@ -2,18 +2,21 @@
     .name = .shaderc_zig,
     .version = "1.0.0",
     .dependencies = .{
-        .glslang_zig = .{
-            .path = "../glslang.zig",
-        },
-        .toolbox = .{
-            .path = "../toolbox",
-        },
-        .spirv_zig = .{
-            .path = "../spirv.zig",
-        },
         .shaderc = .{
             .url = "git+https://github.com/google/shaderc?ref=v2026.1#301b4ede53d59b68bf55f95bb26412d9233c8187",
             .hash = "N-V-__8AAAh4EgD_1vyfeRQed3y6urhGewfbgX0yP6g04hGv",
+        },
+        .toolbox = .{
+            .url = "git+https://github.com/tiawl/toolbox#c40e214efcaf902c455dc9ba3dc1ddf64bb3bf25",
+            .hash = "toolbox-2.0.0-kRAu4Cp6AAAOOwydlP8GG2SVXq82AhgeA_C6ABUpDZhH",
+        },
+        .spirv_zig = .{
+            .url = "git+https://github.com/tiawl/spirv.zig#61dbe491192d4ed9795a5a425c3cfdb7073a74b8",
+            .hash = "spirv_zig-1.0.0-u_xqhypxfQCUFgIcMGTS4BoKigMvqmYqHVzgOqMJ5wVU",
+        },
+        .glslang_zig = .{
+            .url = "git+https://github.com/tiawl/glslang.zig#d713189ca6d670d8f1aa9c3f16a7ae1b302b5838",
+            .hash = "glslang_zig-1.0.0-QiUC6rTRXgAlK0Vw0-9tDRtZIpbnFNxIEUBb19NOHc9R",
         },
     },
     .minimum_zig_version = "0.15.2",
