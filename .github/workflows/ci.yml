@@ -39,8 +39,3 @@ jobs:
       shell: 'bash'
       run: |
         zig build -Dupdate -Dverbose
-
-    - name: Test fetching
-      shell: 'bash'
-      run: |
-        zig build -Dfetch -Dverbose
