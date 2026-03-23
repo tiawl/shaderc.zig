@@ -3,22 +3,22 @@ name: ci
 on:
   pull_request:
     branches:
-      - trunk
+      - zig-stable
 
 jobs:
   linter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: mlugg/setup-zig@v2
     - name: Check zig is canonical
       shell: bash
       run: |
         zig fmt --check .
   example:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: mlugg/setup-zig@v2
     - name: Test building example
       shell: bash
@@ -29,9 +29,9 @@ jobs:
         ${GITHUB_WORKSPACE}/example/zig-out/bin/example
         set +f
   maintainance:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup Zig
       uses: mlugg/setup-zig@v2
 
