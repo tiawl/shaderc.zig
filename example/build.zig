@@ -20,7 +20,7 @@ pub fn build(builder: *std.Build) !void {
         .optimize = optimize,
     });
 
-    exe.linkLibrary(shaderc_dep.artifact("shaderc"));
+    exe.root_module.linkLibrary(shaderc_dep.artifact("shaderc"));
 
     builder.installArtifact(exe);
 }
