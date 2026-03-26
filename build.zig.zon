@@ -9,14 +9,17 @@
         .toolbox = .{
             .url = "git+https://github.com/tiawl/toolbox?ref=2.0.0#8cfe99b13c380c0a0437e9edc05ab4b961b242d6",
             .hash = "toolbox-2.0.0-kRAu4EF8AAC9LKCNAHFDbj1RzTI4yczjgz7PL_9YjYqb",
+            .branch = "zig-stable",
         },
         .spirv_zig = .{
             .url = "git+https://github.com/tiawl/spirv.zig?ref=toolbox-2.0.0#2919733e4905aaf39ce9c97d1e998b93c57a03f5",
             .hash = "spirv_zig-1.0.0-u_xqhzVxfQB-CxWN7LB4NZV5zcYewz-9PIPkhtxxSELL",
+            .branch = "zig-stable",
         },
         .glslang_zig = .{
             .url = "git+https://github.com/tiawl/glslang.zig?ref=toolbox-2.0.0#ec5f6a0dfe592904f118613aea227860bb153eff",
             .hash = "glslang_zig-1.0.0-QiUC6r7RXgBhJgb3mK5D8pyKZgroKCj5xkE1gw29mZZP",
+            .branch = "zig-stable",
         },
     },
     .minimum_zig_version = "0.15.2",
