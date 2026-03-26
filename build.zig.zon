@@ -17,7 +17,7 @@
             .branch = "zig-nightly",
         },
         .glslang_zig = .{
-            .url = "git+https://github.com/tiawl/glslang.zig.git#8580ebee54687dfeb87a01b05118057815f49939",
+            .url = "git+https://github.com/tiawl/glslang.zig.git#5df743e087e3ab6d33bf17bd1a294c58d2d7f365",
             .hash = "glslang_zig-1.0.0-QiUC6qPcXgDzfRf4uemTs3EdoUVRuNBNB2mqnTuqOj2U",
             .branch = "zig-nightly",
         },
