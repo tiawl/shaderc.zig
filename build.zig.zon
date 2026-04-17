@@ -7,16 +7,16 @@
             .hash = "N-V-__8AAAh4EgD_1vyfeRQed3y6urhGewfbgX0yP6g04hGv",
         },
         .toolbox = .{
-            .url = "git+https://github.com/tiawl/toolbox#25cd5e1ab762c3f947df5cfe464e90b208ad8fc1",
+            .url = "git+https://github.com/tiawl/toolbox?ref=2.0.2#6eff672e76e867c277183aee1b8c5c1b70ff4915",
             .hash = "toolbox-2.0.2-kRAu4BibAADKQMUUYyFacpyGgKCWxPyrcxa6ziZQZXwH",
         },
         .spirv_zig = .{
-            .url = "git+https://github.com/tiawl/spirv.zig#2f83b08bd33b9c48ef0d6597883362c89bd88622",
-            .hash = "spirv_zig-1.0.0-u_xqh8ZVfwBmP2LrRlJdRnn1wA5S4NJCvLzJyDJEDDrM",
+            .url = "git+https://github.com/tiawl/spirv.zig?ref=toolbox-2.0.2#5459141609eaeae2b4d9756f339d64cb9fc48f4f",
+            .hash = "spirv_zig-1.0.0-u_xqhwiQfwAslsnz-R_5KRAN0nmGfJk_FT5Ly4OxjDu-",
         },
         .glslang_zig = .{
-            .url = "git+https://github.com/tiawl/glslang.zig#80b063b15d31a450eeda5fe9e306d85cc6a12d87",
-            .hash = "glslang_zig-1.0.0-QiUC6jj1XgAx7YV_wjLB6q-S56nrZM6i28McOROgBG_6",
+            .url = "git+https://github.com/tiawl/glslang.zig?ref=toolbox-2.0.2#d65bb714fa0f6685c46bd0e78cad9c67cacdd2fc",
+            .hash = "glslang_zig-1.0.0-QiUC6qz1XgB--wVl30PMCJDzt-uFaT2dYAWA2gPeoD5h",
         },
     },
     .minimum_zig_version = "0.16.0",
