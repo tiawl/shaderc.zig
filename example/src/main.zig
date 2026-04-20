@@ -1,8 +1,5 @@
 const std = @import("std");
-
-const c = @cImport({
-    @cInclude("shaderc/shaderc.h");
-});
+const c = @import("c");
 
 const Compilation = struct {
     const Result = struct {
