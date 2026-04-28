@@ -3,8 +3,8 @@
     .version = "1.0.0",
     .dependencies = .{
         .shaderc = .{
-            .url = "git+https://github.com/google/shaderc?ref=v2026.1#301b4ede53d59b68bf55f95bb26412d9233c8187",
-            .hash = "N-V-__8AAAh4EgD_1vyfeRQed3y6urhGewfbgX0yP6g04hGv",
+            .url = "git+https://github.com/google/shaderc?ref=v2026.2#d5f08ae5c5a9a45165578445cbd0f9adf0223448",
+            .hash = "N-V-__8AANyFEgDsvMJTUyqh4Sw6dv4oSAaybpE-cZR9qw53",
         },
         .toolbox = .{
             .url = "git+https://github.com/tiawl/toolbox?ref=2.0.2#6eff672e76e867c277183aee1b8c5c1b70ff4915",
