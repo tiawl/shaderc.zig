@@ -57,7 +57,7 @@ const Compiler = struct {
         // The "entry_point_name" null-terminated string defines the name of
         // the entry point to associate with this GLSL source:
         return .{
-            .handle = c.shaderc_compile_into_spv(self.handle, try allocator.dupeZ(u8, source), source.len, @intFromEnum(kind), try allocator.dupeZ(u8, symbol), "main", options.handle),
+            .handle = c.shaderc_compile_into_spv(self.handle, try allocator.dupeSentinel(u8, source, 0), source.len, @intFromEnum(kind), try allocator.dupeSentinel(u8, symbol, 0), "main", options.handle),
         };
     }
 };
