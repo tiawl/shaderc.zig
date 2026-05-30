@@ -39,7 +39,7 @@ pub fn build(builder: *std.Build) !void {
         .name = @tagName(@import("build.zig.zon").name),
         .root_module = std.Build.Module.create(builder, .{
             .root_source_file = .{
-                .cwd_relative = try builder.build_root.join(builder.allocator, &.{ "src", "main.zig" }),
+                .cwd_relative = if (@hasField(std.Build, "build_root")) try builder.build_root.join(builder.allocator, &.{ "src", "main.zig" }) else if (@hasField(std.Build, "root")) try builder.root.root_dir.join(builder.allocator, &.{ "src", "main.zig" }) else unreachable,
             },
             .target = target,
             .optimize = optimize,
